@@ -253,12 +253,8 @@
 
         /* The current and neighbour column are both covering multiple columns */
         if (isNaN(idx) && isNaN(idxNeighbour)) {
-          var headers = $(dom.resizeCol).parents("table").find('th');
-          var resizeIndex = headers.index(dom.resizeCol);
-          if (resizeIndex > this.s.dt.aoColumns.length)
-            resizeIndex -= this.s.dt.aoColumns.length;
-          idx = headers.toArray().slice(0, resizeIndex).reduce(function( acc, cur ) { return acc + parseInt($(cur).attr('colSpan')) }, 0);
-          idx += parseInt($(dom.resizeCol).attr('colSpan')) - 1;
+          var parentname = $(dom.resizeCol).attr('data-columnname');
+          idx = $('th').filter(function () {return $(this).attr('data-parentcolumnname') === parentname}).last().attr('data-column-index');
           idxNeighbour = idx + 1;
         }
 
@@ -321,10 +317,10 @@
        */
       "_fnStateLoad": function () {
         var that = this,
-          loadedState = this.s.dt.oLoadedState;
+            loadedState = this.s.dt.oLoadedState;
         if (loadedState && loadedState.columns) {
           var colStates = loadedState.columns,
-            currCols = this.s.dt.aoColumns;
+              currCols = this.s.dt.aoColumns;
           // Only apply the saved widths if the number of columns is the same.
           // Otherwise, we don't know if we're applying the width to the correct column.
           if (colStates.length > 0 && colStates.length === currCols.length) {
@@ -507,10 +503,10 @@
 
         /* Add event handlers to the document */
         $(document)
-          .off('mousemove.ColResize').on('mousemove.ColResize', function (e) {
+            .off('mousemove.ColResize').on('mousemove.ColResize', function (e) {
           that._fnMouseMove.call(that, e);
         })
-          .off('mouseup.ColResize').on('mouseup.ColResize', function (e) {
+            .off('mouseup.ColResize').on('mouseup.ColResize', function (e) {
           that._fnMouseUp.call(that, e);
         });
       },
@@ -683,7 +679,7 @@
             e.preventDefault();
             that._fnMouseDown.call(that, e, nTh);
           })
-            .off('click.ColResize').on('click.ColResize', function (e) {
+              .off('click.ColResize').on('click.ColResize', function (e) {
             that._fnClick.call(that, e);
           });
         } else {
@@ -850,8 +846,8 @@
 
     // Register a new feature with DataTables
     if (typeof $.fn.dataTable == "function" &&
-      typeof $.fn.dataTableExt.fnVersionCheck == "function" &&
-      $.fn.dataTableExt.fnVersionCheck('1.9.3')) {
+        typeof $.fn.dataTableExt.fnVersionCheck == "function" &&
+        $.fn.dataTableExt.fnVersionCheck('1.9.3')) {
       $.fn.dataTableExt.aoFeatures.push({
         "fnInit": function (settings) {
           var table = settings.oInstance;
