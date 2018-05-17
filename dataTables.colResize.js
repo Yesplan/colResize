@@ -562,6 +562,10 @@
               $(columnParent).width($(columnParent).width() + widthDiff);
             }
             domCols.width(newColWidth);
+            /* If we are resizing the last column, make sure the table scrolls horizontally, otherwise the mouse is being dragged outside of the window
+              without any feedback of actual resizing happening */
+            if (that.s.mouse.targetColumn.idx === this.s.dt.aoColumns.length - 1 && dx > 0)
+              $("div.dataTables_scrollBody").scrollLeft(this.s.dt.oScroller.dom.scroller.scrollLeft + dx);
           } else {
             //A neighbour column must exist in order to resize a column in a table with a fixed width
             if (that.s.mouse.neighbourColumn) {
