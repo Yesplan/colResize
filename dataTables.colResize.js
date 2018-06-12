@@ -317,10 +317,10 @@
        */
       "_fnStateLoad": function () {
         var that = this,
-          loadedState = this.s.dt.oLoadedState;
+            loadedState = this.s.dt.oLoadedState;
         if (loadedState && loadedState.columns) {
           var colStates = loadedState.columns,
-            currCols = this.s.dt.aoColumns;
+              currCols = this.s.dt.aoColumns;
           // Only apply the saved widths if the number of columns is the same.
           // Otherwise, we don't know if we're applying the width to the correct column.
           if (colStates.length > 0 && colStates.length === currCols.length) {
@@ -503,10 +503,10 @@
 
         /* Add event handlers to the document */
         $(document)
-          .off('mousemove.ColResize').on('mousemove.ColResize', function (e) {
+            .off('mousemove.ColResize').on('mousemove.ColResize', function (e) {
           that._fnMouseMove.call(that, e);
         })
-          .off('mouseup.ColResize').on('mouseup.ColResize', function (e) {
+            .off('mouseup.ColResize').on('mouseup.ColResize', function (e) {
           that._fnMouseUp.call(that, e);
         });
       },
@@ -544,9 +544,12 @@
             that.s.mouse.targetColumn.sWidthOrig = that.s.mouse.targetColumn.sWidth = that.s.mouse.targetColumn.width = newColWidth + "px";
             //For each table expand the width by the same amount as the column
             //This accounts for other datatable plugins like FixedColumns
-            domCols.filter(function () {return $(this).hasClass('actions-cell') || $(this).hasClass('group-header')}).parents("table").each(function () {
+            //Take the width of the table in the header element, because the table of the body has no initial width set, causing werid
+            // resize behaviour
+            var oldTableWidth = $('.dataTables_scrollHead table').width();
+            $.uniqueSort(domCols.filter(function () {return $(this).hasClass('actions-cell') || $(this).hasClass('group-header')}).parents("table")).each(function () {
               if (!$(this).parent().hasClass("DTFC_LeftBodyLiner")) {
-                var newWidth = $(this).width() + widthDiff;
+                var newWidth = oldTableWidth + widthDiff;
                 $(this).width(newWidth);
 
               } else {
@@ -683,7 +686,7 @@
             e.preventDefault();
             that._fnMouseDown.call(that, e, nTh);
           })
-            .off('click.ColResize').on('click.ColResize', function (e) {
+              .off('click.ColResize').on('click.ColResize', function (e) {
             that._fnClick.call(that, e);
           });
         } else {
@@ -854,8 +857,8 @@
 
     // Register a new feature with DataTables
     if (typeof $.fn.dataTable == "function" &&
-      typeof $.fn.dataTableExt.fnVersionCheck == "function" &&
-      $.fn.dataTableExt.fnVersionCheck('1.9.3')) {
+        typeof $.fn.dataTableExt.fnVersionCheck == "function" &&
+        $.fn.dataTableExt.fnVersionCheck('1.9.3')) {
       $.fn.dataTableExt.aoFeatures.push({
         "fnInit": function (settings) {
           var table = settings.oInstance;
