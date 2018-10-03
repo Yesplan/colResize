@@ -722,7 +722,7 @@
         that.s.mouse.targetColumn.width = that.dom.resizeCol.width();
 
         $(document).off('mousemove.ColResize mouseup.ColResize');
-        this.s.dt.oInstance.fnAdjustColumnSizing();
+        this.s.dt.oInstance.fnAdjustColumnSizing(false);
         //Table width fix, prevents extra gaps between tables
         var LeftWrapper = $(that.s.dt.nTableWrapper).find(".DTFC_LeftWrapper");
         var DTFC_LeftWidth = LeftWrapper.width();
